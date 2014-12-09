@@ -18,7 +18,7 @@ public class LocalConnectionWorkingCopy extends LocalConnection implements IRemo
 	private final LocalConnection fOriginal;
 
 	public LocalConnectionWorkingCopy(LocalConnection connection) {
-		super(connection.getRemoteServices());
+		super((LocalServices) connection.getRemoteServices());
 		fOriginal = connection;
 	}
 

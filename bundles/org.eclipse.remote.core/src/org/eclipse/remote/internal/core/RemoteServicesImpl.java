@@ -89,9 +89,11 @@ public class RemoteServicesImpl {
 				final IConfigurationElement[] elements = ext.getConfigurationElements();
 
 				for (IConfigurationElement ce : elements) {
-					RemoteServicesDescriptor proxy = new RemoteServicesDescriptor(ce);
-					fRemoteServicesById.put(proxy.getId(), proxy);
-					fRemoteServicesByScheme.put(proxy.getScheme(), proxy);
+					if (ce.getName().equals("remoteServices")) {
+						RemoteServicesDescriptor proxy = new RemoteServicesDescriptor(ce);
+						fRemoteServicesById.put(proxy.getId(), proxy);
+						fRemoteServicesByScheme.put(proxy.getScheme(), proxy);
+					}
 				}
 			}
 		}

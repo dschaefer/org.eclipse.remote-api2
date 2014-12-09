@@ -10,13 +10,15 @@
  *******************************************************************************/
 package org.eclipse.remote.core;
 
+import org.eclipse.core.runtime.PlatformObject;
+
 /**
  * Abstract base class for remote services. Implementors can use this class to provide a default implementation of a remote
  * services provider.
  * 
  * @since 5.0
  */
-public abstract class AbstractRemoteServices implements IRemoteServices {
+public abstract class AbstractRemoteServices extends PlatformObject implements IRemoteServices {
 
 	protected final IRemoteServicesDescriptor fDescriptor;
 

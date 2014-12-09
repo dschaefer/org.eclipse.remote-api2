@@ -72,6 +72,7 @@ public class JSchConnectionWizard extends Wizard implements IRemoteUIConnectionW
 	 */
 	@Override
 	public boolean performFinish() {
+		fPage.performFinish();
 		return true;
 	}
 

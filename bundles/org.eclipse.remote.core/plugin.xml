@@ -8,9 +8,10 @@
    <extension
          point="org.eclipse.remote.core.remoteServices">
       <remoteServices
+            autoPopulated="true"
             class="org.eclipse.remote.internal.core.services.local.LocalServicesFactory"
             id="org.eclipse.remote.LocalServices"
-            name="Local"
+            name="%local.name"
             scheme="file">
       </remoteServices>
    </extension>

@@ -17,8 +17,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.remote.core.api2.IConnectionsService;
 import org.eclipse.remote.internal.core.preferences.Preferences;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -28,7 +30,7 @@ public class RemoteCorePlugin extends Plugin {
 
 	// The shared instance
 	private static RemoteCorePlugin plugin;
-
+	
 	/**
 	 * Returns the shared instance
 	 * 
@@ -78,6 +80,17 @@ public class RemoteCorePlugin extends Plugin {
 		log(new Status(IStatus.ERROR, getUniqueIdentifier(), IStatus.ERROR, e.getMessage(), e));
 	}
 
+	public static <T> T getService(Class<T> cls) {
+		if (plugin != null) {
+			BundleContext context = plugin.getBundle().getBundleContext();
+			ServiceReference<T> ref = context.getServiceReference(cls);
+			if (ref != null) {
+				return context.getService(ref);
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * The constructor
 	 */
@@ -115,6 +128,8 @@ public class RemoteCorePlugin extends Plugin {
 				// Do nothing
 			}
 		});
+		
+		plugin.getBundle().getBundleContext().registerService(IConnectionsService.class, new ConnectionsService(), null);
 	}
 
 	/*

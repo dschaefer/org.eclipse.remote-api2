@@ -18,25 +18,21 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.remote.core.AbstractRemoteConnectionManager;
 import org.eclipse.remote.core.IRemoteConnection;
 import org.eclipse.remote.core.IRemoteConnectionWorkingCopy;
-import org.eclipse.remote.core.IRemoteServices;
 import org.eclipse.remote.core.exception.RemoteConnectionException;
 import org.eclipse.remote.internal.core.messages.Messages;
 
 public class LocalConnectionManager extends AbstractRemoteConnectionManager {
-	private final IRemoteConnection fLocalConnection;
+	private final LocalConnection fLocalConnection;
 
-	public LocalConnectionManager(IRemoteServices services) {
+	public LocalConnectionManager(LocalServices services) {
 		super(services);
 		fLocalConnection = new LocalConnection(services);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.remote.core.IRemoteConnectionManager#getConnection(java
-	 * .lang.String)
-	 */
+	public LocalConnection getLocalConnection() {
+		return fLocalConnection;
+	}
+
 	@Override
 	public IRemoteConnection getConnection(String name) {
 		if (name.equals(fLocalConnection.getName())) {
@@ -45,13 +41,6 @@ public class LocalConnectionManager extends AbstractRemoteConnectionManager {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.remote.core.IRemoteConnectionManager#getConnection(java
-	 * .net.URI)
-	 */
 	@Override
 	public IRemoteConnection getConnection(URI uri) {
 		if (uri.getScheme().equals(EFS.getLocalFileSystem().getScheme())) {
@@ -60,12 +49,6 @@ public class LocalConnectionManager extends AbstractRemoteConnectionManager {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.remote.core.IRemoteConnectionManager#getConnections()
-	 */
 	@Override
 	public List<IRemoteConnection> getConnections() {
 		List<IRemoteConnection> list = new ArrayList<IRemoteConnection>();
@@ -73,25 +56,11 @@ public class LocalConnectionManager extends AbstractRemoteConnectionManager {
 		return list;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.remote.core.IRemoteConnectionManager#newConnection(java
-	 * .lang.String)
-	 */
 	@Override
 	public IRemoteConnectionWorkingCopy newConnection(String name) throws RemoteConnectionException {
 		throw new RemoteConnectionException(Messages.Unable_to_create_new_local_connections);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.remote.core.IRemoteConnectionManager#removeConnection
-	 * (org.eclipse.remote.core.IRemoteConnection)
-	 */
 	@Override
 	public void removeConnection(IRemoteConnection connection) {
 		// Nothing

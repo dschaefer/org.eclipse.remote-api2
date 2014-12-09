@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.remote.core.IRemoteConnection;
@@ -547,4 +551,18 @@ public class JSchConnectionPage extends WizardPage {
 		setPageComplete(message == null);
 	}
 
+	void performFinish() {
+		if (fConnection != null) {
+			new Job("Opening connection") {
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						fConnection.save().open(monitor);
+					} catch (RemoteConnectionException e) {
+						return e.getStatus();
+					}
+					return Status.OK_STATUS;
+				}
+			}.schedule();
+		}
+	}
 }

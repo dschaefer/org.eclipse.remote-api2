@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.remote.core.IRemoteConnection;
 import org.eclipse.remote.core.IRemoteConnectionChangeEvent;
 import org.eclipse.remote.core.IRemoteConnectionChangeListener;
@@ -28,25 +29,53 @@ import org.eclipse.remote.core.IRemoteFileManager;
 import org.eclipse.remote.core.IRemoteProcess;
 import org.eclipse.remote.core.IRemoteProcessBuilder;
 import org.eclipse.remote.core.IRemoteServices;
+import org.eclipse.remote.core.api2.IConnection;
+import org.eclipse.remote.core.api2.IConnectionCommandShellService;
+import org.eclipse.remote.core.api2.IConnectionFileService;
+import org.eclipse.remote.core.api2.IConnectionProcessService;
 import org.eclipse.remote.core.exception.RemoteConnectionException;
 import org.eclipse.remote.core.exception.UnableToForwardPortException;
 import org.eclipse.remote.internal.core.RemoteCorePlugin;
 import org.eclipse.remote.internal.core.messages.Messages;
 
-public class LocalConnection implements IRemoteConnection {
+public class LocalConnection extends PlatformObject implements IRemoteConnection, IConnection,
+		IConnectionProcessService, IConnectionCommandShellService {
 	private final String fName = IRemoteConnectionManager.LOCAL_CONNECTION_NAME;
 	private final String fAddress = Messages.LocalConnection_1;
 	private final String fUsername = System.getProperty("user.name"); //$NON-NLS-1$
 	private boolean fConnected = true;
 	private IPath fWorkingDir = null;
 
-	private final IRemoteFileManager fFileMgr = new LocalFileManager();
+	private final LocalFileManager fFileMgr = new LocalFileManager(this);
 	private final IRemoteConnection fConnection = this;
-	private final IRemoteServices fRemoteServices;
+	private final LocalServices fRemoteServices;
 	private final ListenerList fListeners = new ListenerList();
 
-	public LocalConnection(IRemoteServices services) {
+	public LocalConnection(LocalServices services) {
 		fRemoteServices = services;
+	}
+
+	@Override
+	public String getProviderId() {
+		return LocalServices.LocalServicesId;
+	}
+	
+	@Override
+	public IConnection getConnection() {
+		return this;
+	}
+
+	@Override
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+		if (adapter.equals(IConnection.class)
+				|| adapter.equals(IConnectionProcessService.class)
+				|| adapter.equals(IConnectionCommandShellService.class)) {
+			return this;
+		} else if (adapter.equals(IConnectionFileService.class)) {
+			return fFileMgr;
+		} else {
+			return super.getAdapter(adapter);
+		}
 	}
 
 	/*

@@ -18,53 +18,41 @@ import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.remote.core.IRemoteFileManager;
+import org.eclipse.remote.core.api2.IConnection;
+import org.eclipse.remote.core.api2.IConnectionFileService;
 
-public class LocalFileManager implements IRemoteFileManager {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteFileManager#getDirectorySeparator()
-	 */
+public class LocalFileManager implements IRemoteFileManager, IConnectionFileService {
+	private final IConnection connection;
+
+	public LocalFileManager(IConnection connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public IConnection getConnection() {
+		return connection;
+	}
+	
 	@Override
 	public String getDirectorySeparator() {
 		return System.getProperty("file.separator", "/"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteFileManager#getResource(java.lang.String)
-	 */
 	@Override
 	public IFileStore getResource(String path) {
 		return EFS.getLocalFileSystem().getStore(new Path(path));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteFileManager#toPath(java.net.URI)
-	 */
 	@Override
 	public String toPath(URI uri) {
 		return URIUtil.toPath(uri).toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteFileManager#toURI(org.eclipse.core.runtime.IPath)
-	 */
 	@Override
 	public URI toURI(IPath path) {
 		return URIUtil.toURI(path);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteFileManager#toURI(java.lang.String)
-	 */
 	@Override
 	public URI toURI(String path) {
 		return URIUtil.toURI(path);

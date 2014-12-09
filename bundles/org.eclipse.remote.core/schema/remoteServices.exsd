@@ -17,8 +17,9 @@
          </appInfo>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="remoteServices"/>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="remoteServices" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="connectionsProvider" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -88,18 +89,59 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="autoPopulated" type="boolean">
+            <annotation>
+               <documentation>
+                  Are connections for this service auto populated? If so, UI should not be provided to add connections of this type. Default is false.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
+   <element name="connectionsProvider">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="scheme" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.remote.core.api2.IConnectionsProviderFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="autoPopulated" type="boolean">
+            <annotation>
+               <documentation>
+                  Are connections for this service auto populated? If so, UI should not be provided to add connections of this type. Default is false.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="apiInfo"/>
-      </appInfo>
-      <documentation>
-         The value of the class attribute must implement &lt;samp&gt;org.eclipse.remote.core.IRemoteServicesFactory&lt;/samp&gt;.
-      </documentation>
-   </annotation>
 
    <annotation>
       <appInfo>
@@ -117,6 +159,15 @@
       &lt;/remoteServices&gt;
    &lt;/extension&gt;
 &lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         The value of the class attribute must implement &lt;samp&gt;org.eclipse.remote.core.IRemoteServicesFactory&lt;/samp&gt;.
       </documentation>
    </annotation>
 

@@ -5,6 +5,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.remote.internal.ui.messages.Messages;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -68,6 +69,17 @@ public class RemoteUIPlugin extends AbstractUIPlugin {
 	 */
 	public static void log(Throwable e) {
 		log(new Status(IStatus.ERROR, getDefault().getBundle().getSymbolicName(), IStatus.ERROR, Messages.PTPRemoteUIPlugin_3, e));
+	}
+
+	public static <T> T getService(Class<T> cls) {
+		if (plugin != null) {
+			BundleContext context = plugin.getBundle().getBundleContext();
+			ServiceReference<T> ref = context.getServiceReference(cls);
+			if (ref != null) {
+				return context.getService(ref);
+			}
+		}
+		return null;
 	}
 
 	/**

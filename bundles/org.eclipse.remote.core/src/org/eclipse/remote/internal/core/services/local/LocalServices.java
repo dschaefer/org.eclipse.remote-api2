@@ -18,41 +18,25 @@ import org.eclipse.remote.core.IRemoteServicesDescriptor;
 public class LocalServices extends AbstractRemoteServices {
 	public static final String LocalServicesId = "org.eclipse.remote.LocalServices"; //$NON-NLS-1$
 
-	private final IRemoteConnectionManager fConnMgr = new LocalConnectionManager(this);
+	private final LocalConnectionManager fConnMgr = new LocalConnectionManager(this);
 
 	public LocalServices(IRemoteServicesDescriptor descriptor) {
 		super(descriptor);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteServices#getCapabilities()
-	 */
 	@Override
 	public int getCapabilities() {
 		return 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.remote.core.IRemoteServicesDescriptor#getConnectionManager
-	 * ()
-	 */
 	@Override
 	public IRemoteConnectionManager getConnectionManager() {
 		return fConnMgr;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.remote.core.IRemoteServices#initialize(org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public boolean initialize(IProgressMonitor monitor) {
 		return true;
 	}
+
 }

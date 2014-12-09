@@ -139,4 +139,9 @@ public class RemoteUIImages {
 		}
 		return null;
 	}
+	
+	public static ImageRegistry getImageRegistry() {
+		return fgImageRegistry;
+	}
+
 }
